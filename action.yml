@@ -1,0 +1,24 @@
+name: 'Set Assignees Action'
+description: 'Automatically duplicate reviewers in assignees'
+author: '@wanderbon'
+branding:
+  icon: 'users'
+  color: 'white'
+inputs:
+  reviewers:
+    description: ''
+    required: false
+  github-token:
+    description: ''
+    default: ${{ github.token }}
+    required: false
+  event:
+    description: ''
+    default: ${{ toJson(github.event) }}
+    required: false
+outputs:
+  result:
+    description: '`success` or `failure` is set.'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
