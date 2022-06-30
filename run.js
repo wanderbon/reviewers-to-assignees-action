@@ -16,7 +16,8 @@ async function run(input) {
   }
 
   if (!availableActions.includes(event.action)) {
-    throw new Error('Use this action with "opened" or "edited" action type');
+    console.warn(event.action);
+    // throw new Error('Use this action with "opened" or "edited" action type');
   }
 
   await setAssignees(input, event);
