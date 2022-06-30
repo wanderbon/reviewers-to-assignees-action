@@ -7040,8 +7040,12 @@ async function run(input) {
     throw new Error('JSON parse error. "event" input is invalid.');
   }
 
-  if (!event.action || !event.pull_request || !availableActions.includes(event)) {
+  if (!event.action || !event.pull_request) {
     throw new Error('Use this action in "pull_request" or "push" workflow.');
+  }
+
+  if (!availableActions.includes(event.action)) {
+    throw new Error('Use this action with "opened" or "edited" action type');
   }
 
   await setAssignees(input, event);
