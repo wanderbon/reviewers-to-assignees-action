@@ -11,23 +11,20 @@ async function run(input) {
     throw new Error('JSON parse error. "event" input is invalid.');
   }
 
-  if (!event.action || !event.pull_request) {
-    throw new Error('Use this action in "pull_request" workflow.');
+  if (!event.action || !event.pull_request || !availableActions.includes(event)) {
+    throw new Error('Use this action in "pull_request" or "push" workflow.');
   }
 
   await setAssignees(input, event);
 }
 
 async function setAssignees(input, event) {
-  if (!availableActions.includes(availableActions)) {
-    console.log('!availableActions.includes(availableActions)');
-    return;
-  };
-
   const reviewers = unique(await github.getRequestedReviewers(event, input.githubToken));
   console.log(`reviewers: ${reviewers.join(' ')}`);
 
-  if (reviewers.length === 0) return;
+  if (reviewers.length === 0) {
+    throw new Error('Reviewers list is empty');
+  }
 
   await github.setAssignees(event, input.githubToken, reviewers);
 
