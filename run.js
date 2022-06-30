@@ -19,10 +19,13 @@ async function run(input) {
 }
 
 async function setAssignees(input, event) {
-  if (!input.assignees) return;
-  if (!availableActions.includes(availableActions)) return;
+  if (!availableActions.includes(availableActions)) {
+    console.log('!availableActions.includes(availableActions)');
+    return;
+  };
 
   const reviewers = unique(await github.getRequestedReviewers(event, input.githubToken));
+  console.log(`reviewers: ${reviewers.join(' ')}`);
 
   if (reviewers.length === 0) return;
 
