@@ -37,7 +37,7 @@ async function getRequestedReviewers(event, token) {
       },
     });
 
-    requestedReviewers = res.data.users;
+    requestedReviewers = res.data.users.map((user) => user.login);
   } catch (e) {
     throw new Error(createErrorMessage(e));
   }
@@ -7029,7 +7029,7 @@ exports.debug = debug; // for test
 
 const { github, unique } = __nccwpck_require__(8688);
 
-const availableActions = ['opened', 'edited'];
+const availableActions = ['opened', 'edited', 'synchronize'];
 
 async function run(input) {
   let event;
@@ -7054,7 +7054,6 @@ async function run(input) {
 
 async function setAssignees(input, event) {
   const reviewers = unique(await github.getRequestedReviewers(event, input.githubToken));
-  console.log(`reviewers: ${reviewers.join(' ')}`);
 
   if (reviewers.length === 0) {
     throw new Error('Reviewers list is empty');

@@ -1,6 +1,6 @@
 const { github, unique } = require('./common');
 
-const availableActions = ['opened', 'edited'];
+const availableActions = ['opened', 'edited', 'synchronize'];
 
 async function run(input) {
   let event;
@@ -25,7 +25,6 @@ async function run(input) {
 
 async function setAssignees(input, event) {
   const reviewers = unique(await github.getRequestedReviewers(event, input.githubToken));
-  console.log(`reviewers: ${reviewers.join(' ')}`);
 
   if (reviewers.length === 0) {
     throw new Error('Reviewers list is empty');

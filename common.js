@@ -31,7 +31,7 @@ async function getRequestedReviewers(event, token) {
       },
     });
 
-    requestedReviewers = res.data.users;
+    requestedReviewers = res.data.users.map((user) => user.login);
   } catch (e) {
     throw new Error(createErrorMessage(e));
   }
