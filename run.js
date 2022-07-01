@@ -1,6 +1,6 @@
 const { github, unique } = require('./common');
 
-const availableActions = ['opened', 'edited', 'synchronize'];
+const availableActions = ['opened', 'edited', 'synchronize', 'review_requested'];
 
 async function run(input) {
   let event;
@@ -8,26 +8,30 @@ async function run(input) {
   try {
     event = JSON.parse(input.event);
   } catch (e) {
-    throw new Error('JSON parse error. "event" input is invalid.');
+    console.log(e.message);
+    return;
   }
 
   if (!event.action || !event.pull_request) {
-    throw new Error('Use this action in "pull_request" or "push" workflow.');
+    console.log('Use this action in "pull_request" or "push" workflow.');
+    return;
   }
 
   if (!availableActions.includes(event.action)) {
-    console.warn(event.action);
-    // throw new Error('Use this action with "opened" or "edited" action type');
+    console.log(`Use this action with ${availableActions.join(', ')} action types`);
+    return;
   }
 
   await setAssignees(input, event);
 }
 
 async function setAssignees(input, event) {
+  // const assignees = unique(await github.)
   const reviewers = unique(await github.getRequestedReviewers(event, input.githubToken));
 
   if (reviewers.length === 0) {
-    throw new Error('Reviewers list is empty');
+    console.log('Reviewers list is empty');
+    return;
   }
 
   await github.setAssignees(event, input.githubToken, reviewers);

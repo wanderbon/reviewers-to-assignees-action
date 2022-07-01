@@ -2,6 +2,27 @@ const axios = require('axios');
 
 const API_BASE_URL = 'https://api.github.com/repos';
 
+async function getAssignees(event, token) {
+  let assignees = [];
+
+  try {
+    const res = await axios({
+      method: 'get',
+      url: `${API_BASE_URL}/${event.repository.full_name}/issues/${event.pull_request.number}/assignees`,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `token ${token}`,
+      },
+    });
+
+    // assignees =
+  } catch (e) {
+    throw new Error(createErrorMessage(e));
+  }
+
+  return assignees;
+}
+
 async function setAssignees(event, token, assignees) {
   try {
     await axios({

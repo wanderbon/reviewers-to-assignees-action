@@ -5,9 +5,6 @@ branding:
   icon: 'users'
   color: 'white'
 inputs:
-  reviewers:
-    description: ''
-    required: false
   github-token:
     description: ''
     default: ${{ github.token }}
